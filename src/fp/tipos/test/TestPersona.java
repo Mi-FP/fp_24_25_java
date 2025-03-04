@@ -34,6 +34,9 @@ public class TestPersona {
 		System.out.println(p6.nombre());
 		System.out.println(p6.toString());
 		
+		Persona p7 = new Persona("Sin; Apellidos; Señor; 19/12/2003");
+		System.out.println(p7);
+		
 		// TODO:Mostrar la diferencia en días entre los nacimientos de 
 		// Jorge y Germán.
 

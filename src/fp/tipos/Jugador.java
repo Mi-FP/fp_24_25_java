@@ -2,6 +2,7 @@ package fp.tipos;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 
 /**
  * Jugador de fútbol: nombre, fecha de nacimiento, altura, nacionalidad, (edad).
@@ -13,7 +14,7 @@ import java.time.Period;
  * extensión, capital, (densidad media). 5. Artículo de tienda: nombre,
  * referencia, precio, categoría, stock, (disponibilidad)
  */
-public class Jugador extends Object{
+public class Jugador {
 	private String nombre;
 	private LocalDate fechaNacimiento;
 	private Double altura;
@@ -60,7 +61,27 @@ public class Jugador extends Object{
 	public String toString() {
 		return nombre + "(" + fechaNacimiento + ")" ;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(fechaNacimiento, nacionalidad, nombre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Jugador other = (Jugador) obj;
+		return Objects.equals(fechaNacimiento, other.fechaNacimiento)
+				&& Objects.equals(nacionalidad, other.nacionalidad) && Objects.equals(nombre, other.nombre);
+	}
 	
 	
+	
+
 	
 }

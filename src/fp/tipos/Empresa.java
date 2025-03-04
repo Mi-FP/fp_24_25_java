@@ -1,6 +1,7 @@
 package fp.tipos;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Jugador de fútbol: nombre, fecha de nacimiento, altura, nacionalidad, (edad).
@@ -61,5 +62,23 @@ public class Empresa {
 		return "Empresa [nombre=" + nombre + ", CIF=" + CIF + ", fechaFundacion=" + fechaFundacion
 				+ ", numeroEmpleados=" + numeroEmpleados + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(CIF);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Empresa other = (Empresa) obj;
+		return Objects.equals(CIF, other.CIF);
+	}
+
 
 }

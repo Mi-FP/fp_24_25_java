@@ -1,5 +1,7 @@
 package fp.tipos;
 
+import java.util.Objects;
+
 /**
  * Jugador de fútbol: nombre, fecha de nacimiento, altura, nacionalidad, (edad).
  * 2. Videojuego: nombre, distribuidora, año de lanzamiento, ventas globales,
@@ -52,6 +54,23 @@ public class Pais {
 
 	public void setCapital(String capital) {
 		this.capital = capital;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(capital, nombre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pais other = (Pais) obj;
+		return Objects.equals(capital, other.capital) && Objects.equals(nombre, other.nombre);
 	}
 
 	@Override
