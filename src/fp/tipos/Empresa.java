@@ -1,5 +1,7 @@
 package fp.tipos;
 
+import static fp.utiles.Checkers.checkCondicion;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -11,7 +13,7 @@ import java.util.Objects;
  * extensión, capital, (densidad media). 5. Artículo de tienda: nombre,
  * referencia, precio, categoría, stock, (disponibilidad)
  */
-public class Empresa {
+public class Empresa implements Comparable<Empresa>{
 	private String nombre;
 	private String CIF;
 	private LocalDate fechaFundacion;
@@ -19,6 +21,8 @@ public class Empresa {
 
 	public Empresa(String nombre, String cIF, LocalDate fechaFundacion, Integer numeroEmpleados) {
 		super();
+		checkCondicion("Fecha fundación anterior a la actual", fechaFundacion.isBefore(LocalDate.now()));
+		checkCondicion("Número de emplados debe ser mayor que 0", numeroEmpleados>0);
 		this.nombre = nombre;
 		CIF = cIF;
 		this.fechaFundacion = fechaFundacion;
@@ -46,6 +50,7 @@ public class Empresa {
 	}
 
 	public void setFechaFundacion(LocalDate fechaFundacion) {
+		checkCondicion("Fecha fundación anterior a la actual", fechaFundacion.isBefore(LocalDate.now()));
 		this.fechaFundacion = fechaFundacion;
 	}
 
@@ -54,6 +59,7 @@ public class Empresa {
 	}
 
 	public void setNumeroEmpleados(Integer numeroEmpleados) {
+		checkCondicion("Número de emplados debe ser mayor que 0", numeroEmpleados>0);
 		this.numeroEmpleados = numeroEmpleados;
 	}
 
@@ -78,6 +84,12 @@ public class Empresa {
 			return false;
 		Empresa other = (Empresa) obj;
 		return Objects.equals(CIF, other.CIF);
+	}
+
+	@Override
+	public int compareTo(Empresa o) {
+		
+		return CIF.compareTo(o.CIF);
 	}
 
 

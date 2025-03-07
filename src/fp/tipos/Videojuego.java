@@ -1,5 +1,7 @@
 package fp.tipos;
 
+import static fp.utiles.Checkers.checkCondicion;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -13,7 +15,7 @@ import java.util.Objects;
  * extensión, capital, (densidad media). 5. Artículo de tienda: nombre,
  * referencia, precio, categoría, stock, (disponibilidad)
  */
-public class Videojuego {
+public class Videojuego implements Comparable<Videojuego>{
 	private String nombre;
 	private String distribuidora;
 	private Integer anyo;
@@ -21,6 +23,7 @@ public class Videojuego {
 	
 	public Videojuego(String nombre, String distribuidora, Integer anyo, Double ventasGlobales) {
 		super();
+		checkCondicion("Ventas globales deben ser superior a 0", ventasGlobales>0);
 		this.nombre = nombre;
 		this.distribuidora = distribuidora;
 		this.anyo = anyo;
@@ -61,6 +64,7 @@ public class Videojuego {
 	}
 
 	public void setVentasGlobales(Double ventasGlobales) {
+		checkCondicion("Ventas globales deben ser superior a 0", ventasGlobales>0);
 		this.ventasGlobales = ventasGlobales;
 	}
 	
@@ -98,6 +102,18 @@ public class Videojuego {
 	public String toString() {
 		return "Videojuego [nombre=" + nombre + ", distribuidora=" + distribuidora + ", anyo=" + anyo
 				+ ", ventasGlobales=" + ventasGlobales + "]";
+	}
+
+	@Override
+	public int compareTo(Videojuego o) {
+		int cmp = nombre.compareTo(o.nombre);
+		if (cmp == 0) {
+			cmp = distribuidora.compareTo(o.distribuidora);
+		}
+		if (cmp == 0) {
+			cmp = anyo.compareTo(o.anyo);
+		}
+		return cmp;
 	}
 	
 	

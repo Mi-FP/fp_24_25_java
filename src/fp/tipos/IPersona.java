@@ -4,4 +4,5 @@ public interface IPersona {
 	String getNombre();
 	String getApellido1();
 	String getApellido2();
+	Integer getEdad();
 }

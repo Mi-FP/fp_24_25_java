@@ -13,7 +13,7 @@ import java.util.Objects;
 
 //
 
-public class Persona implements IPersona, Comparable<Persona> {
+public class Persona implements IPersona, Comparable<IPersona> {
 	private static final String DELIMITADOR = ";";
 	private String nombre;
 	private String apellido1;
@@ -131,13 +131,20 @@ public class Persona implements IPersona, Comparable<Persona> {
 	}
 
 	public Integer getEdad() {
-		//TODO: Hacerla
-		return 0;
+		return fechaNacimiento.
+				until(LocalDate.now()).getYears();
 	}
 
 	
-	public int compareTo(Persona o) {
-		return getNombre().compareTo(o.getNombre());
+	public int compareTo(IPersona o) {
+		int cmp = apellido1.compareTo(o.getApellido1());
+		if (cmp == 0) {
+			cmp = apellido2.compareTo(o.getApellido2());
+		}
+		if (cmp == 0) {
+			cmp = nombre.compareTo(o.getNombre());
+		}
+		return cmp;
 	}
 
 }

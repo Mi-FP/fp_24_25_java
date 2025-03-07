@@ -1,6 +1,7 @@
 package fp.tipos;
 
 import java.util.Objects;
+import static fp.utiles.Checkers.*;
 
 /**
  * Jugador de fútbol: nombre, fecha de nacimiento, altura, nacionalidad, (edad).
@@ -10,7 +11,7 @@ import java.util.Objects;
  * extensión, capital, (densidad media). 5. Artículo de tienda: nombre,
  * referencia, precio, categoría, stock, (disponibilidad)
  */
-public class Pais {
+public class Pais implements Comparable<Pais>{
 	private String nombre;
 	private Integer numeroHabitantes;
 	private Double extension;
@@ -22,6 +23,8 @@ public class Pais {
 		this.numeroHabitantes = numeroHabitantes;
 		this.extension = extension;
 		this.capital = capital;
+		checkCondicion("Densidad no válida", 
+				numeroHabitantes>0 && extension>0);
 	}
 
 	public String getNombre() {
@@ -37,6 +40,8 @@ public class Pais {
 	}
 
 	public void setNumeroHabitantes(Integer numeroHabitantes) {
+		checkCondicion("Densidad no válida", 
+				numeroHabitantes>0);
 		this.numeroHabitantes = numeroHabitantes;
 	}
 
@@ -45,6 +50,8 @@ public class Pais {
 	}
 
 	public void setExtension(Double extension) {
+		checkCondicion("Densidad no válida", 
+				 extension>0);
 		this.extension = extension;
 	}
 
@@ -77,6 +84,15 @@ public class Pais {
 	public String toString() {
 		return "Pais [nombre=" + nombre + ", numeroHabitantes=" + numeroHabitantes + ", extension=" + extension
 				+ ", capital=" + capital + "]";
+	}
+
+	@Override
+	public int compareTo(Pais o) {
+		int cmp = nombre.compareTo(o.nombre);
+		if (cmp == 0) {
+			cmp = capital.compareTo(o.capital);
+		}
+		return cmp;
 	}
 
 }

@@ -1,8 +1,11 @@
 package fp.tipos;
 
 import java.time.LocalDate;
+
 import java.time.Period;
 import java.util.Objects;
+
+import static fp.utiles.Checkers.*;
 
 /**
  * Jugador de fútbol: nombre, fecha de nacimiento, altura, nacionalidad, (edad).
@@ -14,7 +17,7 @@ import java.util.Objects;
  * extensión, capital, (densidad media). 5. Artículo de tienda: nombre,
  * referencia, precio, categoría, stock, (disponibilidad)
  */
-public class Jugador {
+public class Jugador implements Comparable<Jugador>{
 	private String nombre;
 	private LocalDate fechaNacimiento;
 	private Double altura;
@@ -22,6 +25,7 @@ public class Jugador {
 	
 	public Jugador(String nombre, LocalDate fechaNacimiento, Double altura, String nacionalidad) {
 		super();
+		checkCondicion("Fecha nacimiento incorrecta", fechaNacimiento.isBefore(LocalDate.now()));
 		this.nombre = nombre;
 		this.fechaNacimiento = fechaNacimiento;
 		this.altura = altura;
@@ -43,6 +47,7 @@ public class Jugador {
 		return fechaNacimiento;
 	}
 	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		checkCondicion("Fecha nacimiento incorrecta", fechaNacimiento.isBefore(LocalDate.now()));
 		this.fechaNacimiento = fechaNacimiento;
 	}
 	public Double getAltura() {
@@ -78,6 +83,19 @@ public class Jugador {
 		Jugador other = (Jugador) obj;
 		return Objects.equals(fechaNacimiento, other.fechaNacimiento)
 				&& Objects.equals(nacionalidad, other.nacionalidad) && Objects.equals(nombre, other.nombre);
+	}
+
+	@Override
+	public int compareTo(Jugador o) {
+		int cmp = nombre.compareTo(o.nombre);
+		if (cmp == 0) {
+			cmp = fechaNacimiento.compareTo(o.fechaNacimiento);
+		}
+		if (cmp == 0) {
+			cmp = nacionalidad.compareTo(o.nacionalidad);
+		}
+		
+		return cmp;
 	}
 	
 	

@@ -2,6 +2,8 @@ package fp.tipos;
 
 import java.util.Objects;
 
+import static fp.utiles.Checkers.*;
+
 /**
  * Jugador de fútbol: nombre, fecha de nacimiento, altura, nacionalidad, (edad).
  * 2. Videojuego: nombre, distribuidora, año de lanzamiento, ventas globales,
@@ -10,7 +12,7 @@ import java.util.Objects;
  * extensión, capital, (densidad media). 5. Artículo de tienda: nombre,
  * referencia, precio, categoría, stock, (disponibilidad)
  */
-public class ArticuloTienda implements IArticuloEmpresa {
+public class ArticuloTienda implements IArticuloEmpresa, Comparable<IArticuloEmpresa> {
 	private String nombre;
 	private String referencia;
 	private Double precio;
@@ -19,6 +21,7 @@ public class ArticuloTienda implements IArticuloEmpresa {
 
 	public ArticuloTienda(String nombre, String referencia, Double precio, String categoria, Integer stock) {
 		super();
+		checkNotNull(referencia);
 		this.nombre = nombre;
 		this.referencia = referencia;
 		this.precio = precio;
@@ -48,6 +51,7 @@ public class ArticuloTienda implements IArticuloEmpresa {
 
 	@Override
 	public void setReferencia(String referencia) {
+		checkNotNull(referencia);
 		this.referencia = referencia;
 	}
 
@@ -103,6 +107,11 @@ public class ArticuloTienda implements IArticuloEmpresa {
 			return false;
 		ArticuloTienda other = (ArticuloTienda) obj;
 		return Objects.equals(referencia, other.referencia);
+	}
+
+	
+	public int compareTo(IArticuloEmpresa o) {
+		return referencia.compareTo(o.getReferencia());
 	}
 
 }
