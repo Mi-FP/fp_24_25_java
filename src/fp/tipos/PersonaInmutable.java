@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public record PersonaInmutable(String nombre, String apellido1, String apellido2, LocalDate fechaNacimiento) {
 	
+	
+	
 	public PersonaInmutable(String nombre, String apellido1) {
 		this(nombre, apellido1, "", LocalDate.MIN);
 	}
@@ -27,4 +29,5 @@ public record PersonaInmutable(String nombre, String apellido1, String apellido2
 	public String toString() {
 		return nombre + " " + apellido1 + " " + apellido2 + "(" + fechaNacimiento + ")";
 	}
+
 }
