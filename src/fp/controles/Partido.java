@@ -5,8 +5,11 @@ import static fp.utiles.Checkers.checkCondicion;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 /**
  * Comaparable: 0.75
  * Propiedades: 0.75
@@ -34,6 +37,10 @@ public class Partido implements Comparable<Partido>{
 		Competicion competicion = Competicion.valueOf(splits[4].trim().toUpperCase());
 		List<Resultado> resultadosParciales = parseaResultadosParciales(splits[5].trim());
 		
+		checkResultados(resultadosParciales);
+		checkCondicion("Fecha no válida", !fechaPartido.isAfter(LocalDate.now()));
+		checkCondicion("Número de espectadores no válido", numeroEspectadores>=0);
+		
 		this.fechaPartido = fechaPartido;
 		this.equipoLocal = equipoLocal;
 		this.equipoVisitante = equipoVisitante;
@@ -41,6 +48,42 @@ public class Partido implements Comparable<Partido>{
 		this.competicion = competicion;
 		this.resultadosParciales = resultadosParciales;
 	}
+	
+	private List<Integer> getMinutos(List<Resultado> resultadosParciales2) {
+		List<Integer> result = new ArrayList<Integer>();
+		for (Resultado r: resultadosParciales2) {
+			result.add(r.minuto());
+		}
+		return result;
+	}
+	
+	private List<Integer> getSumasGoles(List<Resultado> resultadosParciales2) {
+		List<Integer> result = new ArrayList<Integer>();
+		for (Resultado r: resultadosParciales2) {
+			result.add(r.golesLocal() + r.golesVisitante());
+		}
+		return result;
+	}
+
+
+	
+	private void checkResultados(List<Resultado> resultadosParciales2) {
+		List<Integer> minutos = getMinutos(resultadosParciales2);
+		List<Integer> ordenados = new ArrayList<Integer>(minutos);
+		Collections.sort(ordenados);
+		
+		checkCondicion("Minutos no crecientes", minutos.equals(ordenados));
+		
+		List<Integer> sumas = getSumasGoles(resultadosParciales2);
+		ordenados = new ArrayList<Integer>(sumas);
+		Collections.sort(ordenados);
+
+		checkCondicion("Suma goles no crecientes", sumas.equals(ordenados));
+
+		Set<Integer> sinRepetidos = new HashSet<>(sumas);
+		checkCondicion("Existen resultados repetidos", sumas.equals(sinRepetidos));
+	}
+
 	//[0-0-0,...]
 	private List<Resultado> parseaResultadosParciales(String formato) {
 		String [] splits = formato.replace("[", "").replace("]", "").split(",");
@@ -63,12 +106,9 @@ public class Partido implements Comparable<Partido>{
 		return resultadosParciales.get(resultadosParciales.size()-1).golesVisitante();
 	}
 	public List<Integer> getMinutos(){
-		List<Integer> result = new ArrayList<Integer>();
-		for (Resultado r: resultadosParciales) {
-			result.add(r.minuto());
-		}
-		return result;
+		return getMinutos(this.resultadosParciales);
 	}
+
 	public int hashCode() {
 		return Objects.hash(equipoLocal, equipoVisitante, fechaPartido);
 	}
