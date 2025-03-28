@@ -1,7 +1,9 @@
 package fp.tipos.sevici;
 
 import static fp.tipos.sevici.UnidadMedida.*;
+
 import static fp.utiles.Checkers.*;
+import static java.lang.Math.*;
 
 public record CoordenadasGPS(Double latitud, Double longitud, UnidadMedida unidad) {
 
@@ -49,9 +51,17 @@ public record CoordenadasGPS(Double latitud, Double longitud, UnidadMedida unida
 	}
 
 	public CoordenadasGPS aRadianes() {
-		// Devuelve una coordenada con la latitud y longitud medida en radianes. Si la
-		// coordenada está en radianes, devuelve una copia de la coordenada original.
-		return null;
+		// Devuelve una coordenada con la latitud y 
+		// longitud medida en radianes. Si la
+		// coordenada está en radianes, 
+		//devuelve una copia de la coordenada original.
+		CoordenadasGPS result = new CoordenadasGPS(
+				latitud, longitud, unidad);
+		if(unidad.equals(GRADOS)) {
+			result = new CoordenadasGPS(toRadians(latitud), 
+					toRadians(longitud), RADIANES);
+		}
+		return result;
 	}
 
 	public CoordenadasGPS aGrados() {

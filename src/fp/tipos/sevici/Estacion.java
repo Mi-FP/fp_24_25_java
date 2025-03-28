@@ -8,13 +8,18 @@ public class Estacion implements Comparable<Estacion>{
 	private Integer numPuestos;
 	private Integer bicisDisponibles;
 	private CoordenadasGPS coordenadas;
-	
+	//name,slots,empty_slots,free_bikes,latitude,longitude
 	public Estacion(String id, String nombre, Integer numPuestos, Integer bicisDisponibles,
 			CoordenadasGPS coordenadas) {
 		super();
 		checkCondicion("Numero de puesto de ser mayor que 0", numPuestos>0);
-		checkCondicion("Numero de bicicletas debe estar en (0, numPuestos]", 
-				bicisDisponibles>0 && bicisDisponibles<=numPuestos);
+		try {
+		checkCondicion("Numero de bicicletas debe estar en [0, numPuestos]", 
+				bicisDisponibles>=0 && bicisDisponibles<=numPuestos);
+		}catch(IllegalArgumentException e) {
+			System.out.println(bicisDisponibles);
+		}
+		
 		
 		this.id = id;
 		this.nombre = nombre;
