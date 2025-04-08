@@ -1,8 +1,12 @@
 package fp.tipos.sevici;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class RedEstacionesNoStream implements RedEstaciones {
 
@@ -14,30 +18,42 @@ public class RedEstacionesNoStream implements RedEstaciones {
 		this.estaciones = estaciones;
 	}
 
-	@Override
-	public Integer getNumeroEstaciones() {
-		return estaciones.size();
-	}
-
 	// : añade una estación a la red, si la estación no está en la red. Si ya está,
 	// no hace nada.
 	@Override
 	public void agregarEstacion(Estacion e) {
-		
+		estaciones.add(e);
+	}
+
+	@Override
+	public Integer getNumeroEstaciones() {
+		return estaciones.size();
 	}
 
 	// : obtiene una lista con las estaciones que tienen alguna bicicleta
 	// disponible.
 	@Override
 	public List<Estacion> getEstacionesBicisDisponibles() {
-		return null;
+		List<Estacion> result = new ArrayList<Estacion>();
+		for (Estacion e : estaciones) {
+			if (e.getTieneBicisDisponibles()) {
+				result.add(e);
+			}
+		}
+		return result;
 	}
 
 	// : obtiene una lista
 	// con las estaciones que tienen un número mínimo de bicicletas disponibles.
 	@Override
 	public List<Estacion> getEstacionesBicisDisponibles(Integer k) {
-		return null;
+		List<Estacion> result = new ArrayList<Estacion>();
+		for (Estacion e : estaciones) {
+			if (e.getBicisDisponibles() >= k) {
+				result.add(e);
+			}
+		}
+		return result;
 	}
 
 	// :
@@ -46,27 +62,50 @@ public class RedEstacionesNoStream implements RedEstaciones {
 	// distancia dada como parámetro.
 	@Override
 	public SortedSet<Estacion> getEstacionesCercanas(CoordenadasGPS cs, Double distancia) {
-		return null;
+		Comparator<Estacion> cmp = Comparator.comparing((Estacion e) -> e.getCoordenadas().getDistanciaHaversine(cs))
+				.thenComparing(Comparator.naturalOrder());
+		SortedSet<Estacion> result = new TreeSet<Estacion>(cmp);
+		for (Estacion e : getEstacionesBicisDisponibles()) {
+			if (e.getCoordenadas().getDistanciaHaversine(cs) <= distancia) {
+				result.add(e);
+			}
+		}
+		return result;
 	}
 
 	// : obtiene la estación que tiene más
 	// bicicletas disponibles.
 	@Override
 	public Estacion getEstacionMasBicisDisponibles() {
-		return null;
+		Comparator<Estacion> cmp = Comparator.comparing(Estacion::getBicisDisponibles)
+				.thenComparing(Comparator.naturalOrder());
+		return Collections.max(estaciones, cmp);
 	}
 
-	@Override
 	public Integer getTotalPuestos() {
-		return null;
+		Integer result = 0;
+		for (Estacion e : estaciones) {
+			result += e.getNumPuestos();
+		}
+		return result;
 	}
 
 	// : obtiene la ocupación media de
 	// las estaciones que tienen bicis disponibles. Si no se puede calcular la
 	// media, devuelve `null`.
-	@Override
 	public Double getOcupacionMediaEstacionesConBicis() {
-		return null;
+		Double result = 0.0;
+		Integer numEstaciones = 0;
+		for (Estacion e : getEstacionesBicisDisponibles()) {
+			result += e.getOcupacion();
+			numEstaciones++;
+		}
+		if (numEstaciones > 0) {
+			result = result / numEstaciones;
+		} else {
+			result = null;
+		}
+		return result;
 	}
 
 	// devuelve cierto si todas las estaciones que se encuentran a una
@@ -96,7 +135,8 @@ public class RedEstacionesNoStream implements RedEstaciones {
 
 	@Override
 	public String toString() {
-		return "RedEstaciones [estaciones=" + estaciones + ", nombreRed=" + nombreRed + "]";
+		//TODO:  Hacer forEach
+		return nombreRed + "\n" + estaciones;
 	}
 
 }
