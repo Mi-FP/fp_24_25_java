@@ -2,9 +2,13 @@ package fp.tipos.sevici;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
@@ -91,10 +95,31 @@ public class RedEstacionesStream implements RedEstaciones {
 		return Objects.equals(nombreRed, other.nombreRed);
 	}
 
-	
 	@Override
 	public String toString() {
-		//TODO:  Hacer forEach
-		return nombreRed + "\n" + estaciones;
+		String s = nombreRed + "\n";
+
+		return s + estaciones.stream().map(e -> e.toString() + "\n").reduce("", (s1, s2) -> s1 + s2);
+
+	}
+
+	@Override
+	public Map<Integer, List<Estacion>> estacionesPorBicisDisponibles() {
+		return estaciones.stream().collect(Collectors.groupingBy(Estacion::getBicisDisponibles));
+	}
+
+	@Override
+	public Map<Integer, Integer> numEstacionesPorBicisDisponibles() {
+		Function<Long, Integer> funcion = l -> l.intValue();
+
+		return estaciones.stream().collect(Collectors.groupingBy(Estacion::getBicisDisponibles,
+				Collectors.collectingAndThen(Collectors.counting(), funcion)));
+	}
+
+	public SortedMap<Integer, Integer> numEstacionesPorBicisDisponibles2() {
+		Function<Long, Integer> funcion = l -> l.intValue();
+
+		return estaciones.stream().collect(Collectors.groupingBy(Estacion::getBicisDisponibles,
+				() -> new TreeMap<Integer, Integer>(), Collectors.collectingAndThen(Collectors.counting(), funcion)));
 	}
 }

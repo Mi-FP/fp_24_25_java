@@ -3,7 +3,9 @@ package fp.tipos.sevici;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -135,8 +137,61 @@ public class RedEstacionesNoStream implements RedEstaciones {
 
 	@Override
 	public String toString() {
-		//TODO:  Hacer forEach
-		return nombreRed + "\n" + estaciones;
+		// TODO: Hacer forEach
+		String result = nombreRed + "\n";
+
+		for (Estacion e : estaciones) {
+			result += e.toString() + "\n";
+		}
+		return result;
+	}
+
+	public Map<Integer, List<Estacion>> estacionesPorBicisDisponibles() {
+		Map<Integer, List<Estacion>> result = new HashMap<Integer, List<Estacion>>();
+		for (Estacion e : estaciones) {
+			Integer clave = e.getBicisDisponibles();
+			if (result.containsKey(clave)) {
+				// List<Estacion> valor = new ArrayList<Estacion>(result.get(clave));
+				// valor.add(e);
+				// result.put(clave, valor);
+				result.get(clave).add(e);
+			} else {
+				List<Estacion> valor = new ArrayList<Estacion>();
+				valor.add(e);
+				result.put(clave, valor);
+			}
+		}
+		return result;
+	}
+
+	public Map<Integer, Integer> numEstacionesPorBicisDisponiblesOld() {
+		Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+		for (Estacion e : estaciones) {
+			Integer clave = e.getBicisDisponibles();
+			if (result.containsKey(clave)) {
+				Integer valor = result.get(clave);
+				result.put(clave, valor + 1);
+			} else {
+
+				result.put(clave, 1);
+			}
+		}
+		return result;
+
+	}
+
+	@Override
+	public Map<Integer, Integer> numEstacionesPorBicisDisponibles() {
+		Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+
+		Map<Integer, List<Estacion>> aux = estacionesPorBicisDisponibles();
+
+		for (Integer clave : aux.keySet()) {
+			result.put(clave, aux.get(clave).size());
+		}
+
+		return result;
+
 	}
 
 }

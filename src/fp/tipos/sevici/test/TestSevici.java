@@ -12,7 +12,7 @@ public class TestSevici {
 	public static void main(String[] args) {
 
 		List<String> lineas = Ficheros.leerLineas("data/estaciones.csv");
-		
+
 		System.out.println("---------------------------------------------");
 
 		String linea = lineas.get(1);
@@ -20,9 +20,9 @@ public class TestSevici {
 		Estacion e = FactoriaEstaciones.parsearEstacion(linea);
 
 		System.out.println(e);
-		
-		RedEstaciones red = 
-				FactoriaEstaciones.leerRedEstaciones("data/estaciones.csv", "Sevici");
+		System.out.println("---------------------------------------------");
+		FactoriaEstaciones.setIsStreamed(true);
+		RedEstaciones red = FactoriaEstaciones.leerRedEstaciones("data/estaciones.csv", "Sevici");
 		System.out.println(red);
 	}
 

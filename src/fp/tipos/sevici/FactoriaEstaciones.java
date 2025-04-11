@@ -11,23 +11,30 @@ import fp.utiles.Ficheros;
 public class FactoriaEstaciones {
 
 	private static final String DELIMITADOR = ",";
+	private static Boolean isStreamed = false;
 
-	
-	
-	/** lee un fichero de estaciones y construye un objeto de tipo RedEstaciones con el nombre de la red dado como parámetro.*/
+	public static void setIsStreamed(Boolean isStreamed) {
+		FactoriaEstaciones.isStreamed = isStreamed;
+	}
+
+	/**
+	 * lee un fichero de estaciones y construye un objeto de tipo RedEstaciones con
+	 * el nombre de la red dado como parámetro.
+	 */
 	public static RedEstaciones leerRedEstaciones(String nombreFichero, String nombreRed) {
 		SortedSet<Estacion> estaciones = new TreeSet<>();
-		
+
 		List<String> lineas = Ficheros.leerLineas(nombreFichero);
 		lineas.remove(0);
-		
-		for(String linea: lineas) {
+
+		for (String linea : lineas) {
 			estaciones.add(parsearEstacion(linea));
 		}
-		
-		
-		return new RedEstacionesNoStream(nombreRed, estaciones);
+
+		return isStreamed ? new RedEstacionesStream(nombreRed, estaciones)
+				: new RedEstacionesNoStream(nombreRed, estaciones);
 	}
+
 	/**
 	 * : crea un objeto de tipo Estación a partir de una cadena de caracteres. La
 	 * cadena de caracteres debe tener el mismo formato que las líneas del fichero
@@ -41,11 +48,11 @@ public class FactoriaEstaciones {
 		checkCondicion("Cadena con formato no válido", trozos.length == 6);
 
 		String aux = trozos[0].trim();
-		
-		String [] trozos_2 = aux.split("_");
+
+		String[] trozos_2 = aux.split("_");
 		String id = trozos_2[0].trim();
 		String nombre = trozos_2[1].trim();
-		
+
 		Integer numPuestos = Integer.valueOf(trozos[1].trim());
 		Integer bicisDisponibles = Integer.valueOf(trozos[2].trim());
 

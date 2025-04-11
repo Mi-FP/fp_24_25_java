@@ -1,6 +1,7 @@
 package fp.tipos.sevici;
 
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 
 public interface RedEstaciones {
@@ -41,4 +42,12 @@ public interface RedEstaciones {
 	// cs, tienen bicis disponibles. False en caso contrario.
 	Boolean tienenBicisDisponiblesTodasEstacionesCercanas(CoordenadasGPS cs, Double distancia);
 
+	// devuelve un Map con las estaciones que tienen un número de bicis disponibles.
+	Map<Integer, List<Estacion>> estacionesPorBicisDisponibles();
+	
+	Map<Integer, Integer> numEstacionesPorBicisDisponibles();
+	
+	
+	
+	
 }
